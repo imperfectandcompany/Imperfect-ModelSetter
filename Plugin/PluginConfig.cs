@@ -1,4 +1,4 @@
-﻿namespace ResourcePrecacher
+﻿namespace SharpTimerModelSetter
 {
     using CounterStrikeSharp.API.Core;
 
@@ -6,6 +6,9 @@
 
     public sealed class PluginConfig : BasePluginConfig
     {
+        public bool vipOnly = false;
+        public bool setOnSpawn = true;
+        
         [JsonPropertyName("Resources")]
         public HashSet<string> ResourceList { get; set; } = new HashSet<string>();
 

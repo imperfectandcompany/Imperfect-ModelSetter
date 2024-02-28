@@ -1,4 +1,4 @@
-﻿namespace ResourcePrecacher
+﻿namespace SharpTimerModelSetter
 {
     public class PluginMigrations : Dictionary<int, Dictionary<int, string>>
     {

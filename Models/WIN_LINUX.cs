@@ -1,4 +1,4 @@
-﻿namespace ResourcePrecacher
+﻿namespace SharpTimerModelSetter
 {
     using System.Runtime.InteropServices;
     using System.Text.Json.Serialization;

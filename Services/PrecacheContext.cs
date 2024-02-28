@@ -1,4 +1,4 @@
-﻿namespace ResourcePrecacher
+﻿namespace SharpTimerModelSetter
 {
     using CounterStrikeSharp.API.Core;
     using CounterStrikeSharp.API.Core.Plugin;
