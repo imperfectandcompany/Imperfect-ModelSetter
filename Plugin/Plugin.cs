@@ -98,7 +98,7 @@
                 }
                 else
                 {
-                    _ = SetModelOnSpawn(player);
+                    _ = SetModelOnSpawn(player, player.SteamID.ToString());
                     return HookResult.Continue;
                 }
             });
@@ -210,14 +210,14 @@
         [CommandHelper(minArgs: 1, usage: "!setmodel [index]", whoCanExecute: CommandUsage.CLIENT_ONLY)]
         public void SetModelAsync(CCSPlayerController? player, CommandInfo command)
         {
-            _ = SetModelAsync(player, command.GetArg(1));
+            _ = SetModelAsync(player, command.GetArg(1), player.SteamID.ToString());
         }
 
-        public async Task SetModelAsync(CCSPlayerController? player, string arg)
+        public async Task SetModelAsync(CCSPlayerController? player, string arg, string SteamID)
         {
             if (Config.vipOnly)
             {
-                if (await GetVipStatus(player) == false)
+                if (await GetVipStatus(SteamID) == false)
                 {
                     Server.NextFrame(() => player.PrintToChat($" {ChatColors.Gold}[SharpTimerModelSetter]{ChatColors.Default} You are not VIP."));
                     return;
@@ -234,23 +234,21 @@
                     return;
                 }
 
-                AddTimer(0.2f, () =>
+
+                Server.NextFrame(() =>
                 {
-                    Server.NextFrame(() =>
-                    {
-                        if (player.IsBot || !player.IsValid || player == null) return;
-                        player.Respawn();
-                        player.Pawn.Value.SetModel(modelpath);
-                        playerModels[player.Slot].PlayerModelPath = modelpath;
-                        Console.WriteLine($"[SharpTimerModelSetter] Model set to {modelpath} for {player.PlayerName} from chat command");
-                        string modelName = Path.GetFileNameWithoutExtension(modelpath);
-                        player.PrintToChat($" {ChatColors.Gold}[SharpTimerModelSetter]{ChatColors.Default} Model set to: {modelName}");
-                    });
+                    if (player.IsBot || !player.IsValid || player == null) return;
+                    player.Respawn();
+                    player.Pawn.Value.SetModel(modelpath);
+                    playerModels[player.Slot].PlayerModelPath = modelpath;
+                    Console.WriteLine($"[SharpTimerModelSetter] Model set to {modelpath} for {player.PlayerName} from chat command");
+                    string modelName = Path.GetFileNameWithoutExtension(modelpath);
+                    player.PrintToChat($" {ChatColors.Gold}[SharpTimerModelSetter]{ChatColors.Default} Model set to: {modelName}");
                 });
             }
             else
             {
-                player.PrintToChat($" {ChatColors.Gold}[SharpTimerModelSetter]{ChatColors.Default} Model index invalid, idiot.");
+                Server.NextFrame(() => player.PrintToChat($" {ChatColors.Gold}[SharpTimerModelSetter]{ChatColors.Default} Model index invalid, idiot."));
             }
         }
 
@@ -259,7 +257,7 @@
         public void ListModels(CCSPlayerController? player, CommandInfo command)
         {
             string ResourcePrecacherCfg = Path.Join(GameDir + "/csgo/addons/counterstrikesharp/configs/plugins/SharpTimerMS", "SharpTimerMS.json");
-            _ = PrintAllResources(player, ResourcePrecacherCfg);
+            _ = PrintAllResources(player, ResourcePrecacherCfg, player.SteamID.ToString());
         }
 
         [ConsoleCommand("sharptimer_modelsetter_vip_only", "This is for the Secondary SharpTimerMS plugin. Wheter to only allow vip the access to it. Default value: false")]
@@ -280,27 +278,27 @@
             Config.setOnSpawn = bool.TryParse(args, out bool setOnSpawnValue) ? setOnSpawnValue : args != "0" && Config.setOnSpawn;
         }
 
-        public async Task SetModelOnSpawn(CCSPlayerController player)
+        public async Task SetModelOnSpawn(CCSPlayerController player, string SteamID)
         {
             if (Config.setOnSpawn == false) return;
 
             if (Config.vipOnly == true)
             {
-                if (await GetVipStatus(player) == false) return;
+                if (await GetVipStatus(SteamID) == false) return;
             }
 
             AddTimer(0.2f, () =>
             {
                 if (player.IsBot || !player.IsValid || player == null) return;
-                player.Pawn.Value.SetModel(playerModels[player.Slot].PlayerModelPath);
+                Server.NextFrame(() => player.Pawn.Value.SetModel(playerModels[player.Slot].PlayerModelPath));
             });
         }
 
-        public async Task PrintAllResources(CCSPlayerController? player, string filePath)
+        public async Task PrintAllResources(CCSPlayerController? player, string filePath, string SteamID)
         {
             if (Config.vipOnly)
             {
-                if (await GetVipStatus(player) == false)
+                if (await GetVipStatus(SteamID) == false)
                 {
                     Server.NextFrame(() => player.PrintToChat($" {ChatColors.Gold}[SharpTimerModelSetter]{ChatColors.Default} You are not VIP."));
                     return;
@@ -321,7 +319,7 @@
                 int index = 0;
                 foreach (JsonElement resource in resourcesArray.EnumerateArray())
                 {
-                    player.PrintToChat($" {ChatColors.Gold}[SharpTimerModelSetter]{ChatColors.Default} #{index++}: {Path.GetFileNameWithoutExtension(resource.GetString())}");
+                    Server.NextFrame(() => player.PrintToChat($" {ChatColors.Gold}[SharpTimerModelSetter]{ChatColors.Default} #{index++}: {Path.GetFileNameWithoutExtension(resource.GetString())}"));
                 }
             }
             catch (FileNotFoundException)
@@ -386,7 +384,7 @@
             }
         }
 
-        private async Task<bool> GetVipStatus(CCSPlayerController? player)
+        private async Task<bool> GetVipStatus(string SteamID)
         {
             var connectionString = GetConnectionStringFromConfigFile();
             var isVip = false;
@@ -399,7 +397,7 @@
 
                 using (var command = new MySqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@SID", player.SteamID.ToString());
+                    command.Parameters.AddWithValue("@SID", SteamID);
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {
