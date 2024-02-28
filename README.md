@@ -13,7 +13,7 @@ It will pre-cache and set the players PlayerModel on Spawn.
 
 ## How to add models:
 Make sure you are running the [MultiAddonManager](https://github.com/Source2ZE/MultiAddonManager) MetaMod and mount your vpk with all the custom Models
-*If you are running ResourcePrecacher make sure to remove it as this plugin already has its functionality*
+*If you are running ResourcePrecacher make sure to remove it as this plugin already has the same functionality and is based uppon ResourcePrecacher*
 
 Then head to `/csgo/addons/counterstrikesharp/configs/plugins/SharpTimerMS` and open `SharpTimerMS.json`.
 After that add your models to the `"Resources"` array, like this:
