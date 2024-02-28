@@ -23,8 +23,8 @@ After that add your models to the `"Resources"` array, like this:
 ```jsonc
 {
   "Resources": [
-     "models/props_office/file_cabinet_03.vmdl",
-     "models/props_exteriors/guardrail512.vmdl",
+     "characters/models/dea/choi/choi.vmdl",
+     "characters/models/dea/9s/nier_9s.vmdl",
      // ..
      // ..
      // ..
