@@ -36,3 +36,4 @@ After that add your models to the `"Resources"` array, like this:
   "ConfigVersion": 1
 }
 ```
+*Note that the first model in the list will be the default model applied on spawn regardless of vip*
