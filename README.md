@@ -37,3 +37,5 @@ After that add your models to the `"Resources"` array, like this:
 }
 ```
 *Note that the first model in the list will be the default model applied on spawn regardless of vip*
+
+On the final step make sure all your vpk assets are sitting in `/csgo/.../.../` in your server files otherwise animations will break!
