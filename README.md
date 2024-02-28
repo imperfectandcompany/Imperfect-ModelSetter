@@ -1,4 +1,5 @@
 # SharpTimerModelSetter
+⚠️Currently not compatible with windows
 
 This plugin is a secondary Plugin that works with SharpTimer in tandem.
 It will pre-cache and set the players PlayerModel on Spawn.
