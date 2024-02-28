@@ -173,10 +173,9 @@
 
                 try
                 {
-                    playerModels[playerSlot] = new PlayerModels
-                    {
-                        PlayerModelPath = GetResourceValue(Path.Join(GameDir + "/csgo/addons/counterstrikesharp/configs/plugins/SharpTimerMS", "SharpTimerMS.json"))
-                    };
+                    playerModels[playerSlot] = new PlayerModels();
+                    playerModels[playerSlot].PlayerModelPath = GetResourceValue(Path.Join(GameDir + "/csgo/addons/counterstrikesharp/configs/plugins/SharpTimerMS", "SharpTimerMS.json"));
+
                 }
                 finally
                 {
@@ -287,10 +286,13 @@
                 if (await GetVipStatus(SteamID) == false) return;
             }
 
-            AddTimer(0.2f, () =>
+            AddTimer(2f, () => //2sec delay for when the player spawns while not fully connected c:
             {
-                if (player.IsBot || !player.IsValid || player == null) return;
-                Server.NextFrame(() => player.Pawn.Value.SetModel(playerModels[player.Slot].PlayerModelPath));
+                Server.NextFrame(() => 
+                {
+                    if (player.IsBot || !player.IsValid || player == null) return;
+                    player.Pawn.Value.SetModel(playerModels[player.Slot].PlayerModelPath);
+                });
             });
         }
 
