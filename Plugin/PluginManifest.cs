@@ -10,11 +10,6 @@
 
         public override string ModuleDescription => "Automatically precache and apply playermodels.";
 
-        public override string ModuleVersion => "1.0.0 " +
-#if RELEASE
-            "(release)";
-#else
-            "(debug)";
-#endif
+        public override string ModuleVersion => $"1.0.0  - {new DateTime(Builtin.CompileTime, DateTimeKind.Utc)}";
     }
 }
