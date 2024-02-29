@@ -41,3 +41,4 @@ After that add your models to the `"Resources"` array, like this:
 *Note that the first model in the list will be the default model applied on spawn*
 
 On the final step make sure all your vpk assets are sitting in `/csgo/.../.../` in your server files otherwise animations will break!
+You can use [Source2Viewer](https://valveresourceformat.github.io/) to "Export as is" to get the unpacked assets from a Workshop VPK inside your `steamapps/workshop/content/730/WORKSHOPID` folder
